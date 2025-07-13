@@ -49,6 +49,10 @@ class IncomeStatement(FinancialStatement):
 
         self._get_sections(self.start_date, self.end_date, False)
 
+        # Ensure section_accounts exists to avoid crash in to_dict()
+        if not hasattr(self, "section_accounts"):
+            self.section_accounts = {}
+
         # gross profit
         self.result_amounts[self.results.GROSS_PROFIT.name] = (
             self.totals[self.sections.OPERATING_REVENUES.name]
@@ -83,6 +87,7 @@ class IncomeStatement(FinancialStatement):
             self._print_result(self.results.TOTAL_EXPENSES),
             self._print_result(self.results.NET_PROFIT, True),
         )
+
 
     def __repr__(self) -> str:
         return f"""Revenue: {self.result_amounts[self.results.TOTAL_REVENUE.name]},
